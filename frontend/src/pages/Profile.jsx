@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Profile = () => {
+ export default function Profile () {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -92,5 +92,3 @@ const Profile = () => {
     </div>
   );
 };
-
-export default Profile;

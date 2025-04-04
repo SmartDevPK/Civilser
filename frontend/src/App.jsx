@@ -11,6 +11,7 @@ import Map from "./pages/Map";
 import Register from "./pages/Register";
 import RegistrationSuccess from "./pages/RegistrationSuccess";
 import WelcomeSection from "./pages/WelcomeSection";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -29,8 +30,8 @@ function App() {
           <Route path="/contact" element={<Map />} />
           <Route path="/welcome" element={<WelcomeSection />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/userprofile" element={<userprofile />} />
-
+          
+          
           <Route
             path="/registrationsuccess"
             element={<RegistrationSuccess />}
