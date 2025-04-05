@@ -40,7 +40,7 @@ const register = async (req, res) => {
     if (!validatePassword(password)) {
       return res.status(400).json({
         success: false,
-        message: "Password must be 8-16 characters and include uppercase, lowercase, number, and special character."
+        message: "Please choose a stronger password. Try a mix of letters, numbers, and symbols."
       });
     }
 
@@ -267,9 +267,9 @@ const updateUser = async (req, res) => {
     const updatedFields = req.body;
 
     const user = await User.findByIdAndUpdate(id, updatedFields, {
-      new:true,
+      new: true, 
       runValidators: true,
-    })
+    });
 
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
@@ -280,7 +280,7 @@ const updateUser = async (req, res) => {
     console.error("Update error:", error);
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
-}
+};
 
 
 export { 
