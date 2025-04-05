@@ -263,24 +263,40 @@ const resetPassword = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const userId = req.user.id;
     const updatedFields = req.body;
 
-    const user = await User.findByIdAndUpdate(id, updatedFields, {
-      new: true, 
-      runValidators: true,
-    });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      updatedFields,
+      {
+        new: true,          
+        runValidators: true 
+      }
+    );
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
     }
 
-    res.status(200).json({ success: true, user });
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user
+    });
+
   } catch (error) {
     console.error("Update error:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
   }
 };
+
 
 
 export { 
