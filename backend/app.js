@@ -3,13 +3,32 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./src/db/user.js";
 import authRoutes from "./src/route/authRoute.js";
+import path from "path";
 
 
 dotenv.config();
 const app = express();
 
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
+
+app.use(express.urlencoded({ extended: true }));
+
+const __dirname = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "frontend", "dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+  });
+}
+
+
+
 app.use(express.json());
 
 

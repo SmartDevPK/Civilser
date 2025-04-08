@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Assets
 import CoArmLogo from "../assets/CoArmLogo.png";
 import RegisterPic from "../assets/RegisterPic.png";
@@ -12,16 +14,63 @@ export default function Registration() {
     email: "",
     password: "",
     registrationCode: "",
-    levelPostion: "",
+    levelPosition: "",
     mobileNumber: "",
     gender: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Form validation
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      toast.error("Please enter your full name"); 
+      return false;
+    }
+    if (!formData.email.trim()) {
+      toast.error("Please enter your email");
+      return false;
+    }
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+    if (!formData.password) {
+      toast.error("Please enter a password");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return false;
+    }
+    if (!formData.registrationCode) {
+      toast.error("Please enter your registration code");
+      return false;
+    }
+    if (!formData.levelPosition) {
+      toast.error("Please enter your level/position");
+      return false;
+    }
+    if (!formData.mobileNumber) {
+      toast.error("Please enter your mobile number");
+      return false;
+    }
+    if (!formData.gender) {
+      toast.error("Please select your gender");
+      return false;
+    }
+    return true;
+  };
 
   // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+
     try {
       const response = await axios.post(
         "http://localhost:5000/register",
@@ -34,16 +83,26 @@ export default function Registration() {
       );
       
       if (response.data.success) {
-        alert("Registration successful!");
-        navigate("/login"); // Redirect to login page
+        toast.success("Registration successful! Redirecting to login...");
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        toast.error(response.data.message || "Registration failed");
       }
     } catch (error) {
-      console.error("Full error:", {
-        message: error.message,
-        response: error.response?.data, 
-        request: error.config?.data,  
-      });
-      alert(error.response?.data?.message || "Registration failed. Please try again.");
+      console.error("Registration error:", error);
+      
+      if (error.response) {
+        // Server responded with a status code outside 2xx range
+        toast.error(error.response.data.message || "Registration failed. Please try again.");
+      } else if (error.request) {
+        // Request was made but no response received
+        toast.error("No response from server. Please check your connection.");
+      } else {
+        // Something happened in setting up the request
+        toast.error("An error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,6 +117,20 @@ export default function Registration() {
 
   return (
     <div className="flex flex-col md:flex-row w-full h-screen">
+      {/* Toast Container */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      
       {/* Left Side - Image */}
       <div className="w-full md:w-2/5 relative h-full hidden md:block">
         <img
@@ -101,7 +174,6 @@ export default function Registration() {
                   className="w-full px-4 py-2 border rounded-md bg-green-50 focus:outline-none focus:border-green-500"
                   value={formData.name}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 
@@ -115,7 +187,6 @@ export default function Registration() {
                   className="w-full px-4 py-2 border bg-green-50 rounded-md focus:outline-none focus:border-green-500"
                   value={formData.gender}
                   onChange={handleInputChange}
-                  required
                 >
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
@@ -136,7 +207,6 @@ export default function Registration() {
                   className="w-full px-4 py-2 border bg-green-50 rounded-md focus:outline-none focus:border-green-500"
                   value={formData.email}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 
@@ -152,7 +222,6 @@ export default function Registration() {
                   className="w-full px-4 py-2 border bg-green-50 rounded-md focus:outline-none focus:border-green-500"
                   value={formData.registrationCode}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 
@@ -163,12 +232,11 @@ export default function Registration() {
                 </label>
                 <input
                   type="text"
-                  name="levelPostion"
+                  name="levelPosition"
                   placeholder="Enter your level"
                   className="w-full px-4 py-2 border bg-green-50 rounded-md focus:outline-none focus:border-green-500"
-                  value={formData.levelPostion}
+                  value={formData.levelPosition}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 
@@ -184,7 +252,6 @@ export default function Registration() {
                   className="w-full px-4 py-2 border bg-green-50 rounded-md focus:outline-none focus:border-green-500"
                   value={formData.mobileNumber}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 
@@ -196,11 +263,10 @@ export default function Registration() {
                 <input
                   type="password"
                   name="password"
-                  placeholder="Enter your password" 
+                  placeholder="Enter your password (min 6 characters)" 
                   className="w-full px-4 py-2 border bg-green-50 rounded-md focus:outline-none focus:border-green-500"
                   value={formData.password}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
             </div>
@@ -208,9 +274,31 @@ export default function Registration() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="mt-6 w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition duration-300"
+              disabled={isLoading}
+              className={`mt-6 w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition duration-300 ${
+                isLoading ? "opacity-75 cursor-not-allowed" : ""
+              }`}
             >
-              Register
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </span>
+              ) : (
+                "Register"
+              )}
             </button>
           </form>
         </div>

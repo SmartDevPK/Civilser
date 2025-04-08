@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Components
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import CountdownTimer from "../components/CountdownTimer";
+
+// Pages/Sections
 import About from "./About";
 import Objectives from "./Objectives";
 import Vision from "./Vision";
@@ -7,22 +14,17 @@ import Donations from "./Donations";
 import Committee from "./Committee";
 import Faq from "./Faq";
 import Map from "./Map";
-import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 
 export default function Home() {
   const images = ["/hero4.png", "/hero2.png", "/hero3.png"];
   const [currentIndex, setCurrentIndex] = useState(0);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
-  const goToRegister = () => {
-    navigate("/register"); // Navigates to the register page
-  };
-  const goToDonate = () => {
-    navigate("/donate"); // Navigates to the donate page
-  };
+  // Navigate Functions
+  const goToRegister = () => navigate("/register");
+  const goToDonate = () => navigate("/donate");
 
+  // Auto Slide Images
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -35,31 +37,33 @@ export default function Home() {
       <div className="bg-white text-black">
         {/* Navbar */}
         {/* <Navbar /> */}
-        {/* Image Slider */}
+
+        {/* Image Slider Section */}
         <div
-          className="relative w-full h-[400px] sm: h-[700px] md:h-[500px] transition-all duration-500"
+          className="relative w-full h-[400px] sm:h-[700px] md:h-[500px] transition-all duration-500"
           style={{
             backgroundImage: `url(${images[currentIndex]})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >
-          {/* Green Gradient Overlay */}
+          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-green-500/40 to-green-900"></div>
-          {/* Centered Content */}
+
+          {/* Slider Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-6 gap-1">
             <h1 className="text-2xl text-center pt-32 mt-20 sm:text-3xl md:text-4xl lg:text-5xl font-bold">
               International Civil Service Conference
             </h1>
-            <div className="flex flex-col text-base text-center font-semibold mx-auto max-w-md md:max-w-lg lg:max-w-xl">
+            <p className="flex flex-col text-base text-center font-semibold mx-auto max-w-md md:max-w-lg lg:max-w-xl">
               Nigeria will host the maiden edition of an international Civil
               Service Conference from Wednesday, 25 to Friday, 27 June 2025 in
               Abuja, a significant event that aims to strengthen the capacity
               and effectiveness of the public sector through global dialogue and
               collaboration.
-            </div>
+            </p>
 
-            {/* Buttons */}
+            {/* Action Buttons */}
             <div className="mt-6 flex space-x-4">
               <button
                 onClick={goToRegister}
@@ -74,10 +78,9 @@ export default function Home() {
                 Donate
               </button>
             </div>
-            <div
-              className="mt-4 md:mt-0 md:ml-auto flex items-center justify-center
-     text-white text-xl font-bold px-6 py-3 rounded-lg"
-            >
+
+            {/* Countdown Timer */}
+            <div className="mt-4 md:mt-0 md:ml-auto flex items-center justify-center text-white text-xl font-bold px-6 py-3 rounded-lg">
               <CountdownTimer />
             </div>
           </div>
@@ -95,13 +98,20 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        {/* Other Sections */}
         <About />
         <Objectives />
         <Vision />
         <Donations />
+        <Committee />
         <Faq />
         <Map />
+
+        {/* Footer */}
         <Footer />
+
+        {/* Copyright */}
         <div className="bg-blue-950 text-white text-center flex items-center justify-center px-4 py-6 md:py-8">
           <p className="text-sm md:text-sm lg:text-sm">
             &copy; 2025 International Civil Service Conference. All rights

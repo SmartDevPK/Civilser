@@ -8,10 +8,11 @@ import About from "./pages/About";
 import BoothServiceRegister from "./pages/BoothServiceRegister";
 import Committee from "./pages/Committee";
 import Donations from "./pages/Donations";
-import EditProfile from "./pages/EditProfile"; 
+import Profile from "./pages/Profile"; 
 import EditUser from "./pages/EditUser";
 import Faq from "./pages/Faq";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from './pages/ResetPassword';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Map from "./pages/Map";
@@ -33,11 +34,12 @@ function App() {
           <Route path="/committee" element={<Committee />} />
           <Route path="/contact" element={<Map />} />
           <Route path="/donate" element={<Donations />} />
-          <Route path="/edit" element={<EditUser />} />
+          <Route path="/EditUser" element={<EditUser />} />
           <Route path="/faqs" element={<Faq />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<EditProfile />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Profile" element={<Profile />} />
           <Route path="/register" element={<Register />} />
           <Route path="/registrationsuccess" element={<RegistrationSuccess />} />
           <Route path="/welcome" element={<WelcomeSection />} />

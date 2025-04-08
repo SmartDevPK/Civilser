@@ -123,7 +123,7 @@ export default function EditProfile() {
           <div className="flex justify-end space-x-4 mt-6">
             <button
               type="button"
-              onClick={() => navigate("/EditProfile")}
+              onClick={() => navigate("/Profile")}
               className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
             >
               Cancel
